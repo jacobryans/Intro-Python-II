@@ -2,6 +2,7 @@ from room import Room
 
 # Declare all the rooms
 
+global room
 room = {
     'outside':  Room("Outside Cave Entrance",
                      "North of you, the cave mount beckons"),
@@ -49,3 +50,22 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+from player import Player
+
+global player
+player = Player(room['outside'])
+
+def update():
+    print(player)
+
+def playerChoice(**kwargs):
+    choices = []
+    for key, value in rooms.i:
+        if (player.currentRoom.name != value): 
+            choices.append(room)
+    print(choices)
+
+update()
+
+playerChoice(**room)
