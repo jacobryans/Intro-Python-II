@@ -25,14 +25,14 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+room['outside'].n_to = 'foyer'
+room['foyer'].s_to = 'outside'
+room['foyer'].n_to = 'overlook'
+room['foyer'].e_to = 'narrow'
+room['overlook'].s_to = 'foyer'
+room['narrow'].w_to = 'foyer'
+room['narrow'].n_to = 'treasure'
+room['treasure'].s_to = 'narrow'
 
 #
 # Main
@@ -54,31 +54,90 @@ room['treasure'].s_to = room['narrow']
 from player import Player
 
 global player
-player = Player(room['foyer'])
+player = Player('outside')
 
 def update():
     print('\n')
     print(player)
+    print(room[player.currentRoom])
 
-def playerChoice(rooms):
-    possibileRooms = []
-    for room in rooms:
-        if(rooms[room].name != player.currentRoom.name):
-            possibileRooms.append(room)
-    return possibileRooms
+def playerChoice(rooms, possibleRooms = []):
+    possibleRooms.clear()
+    notRoom = False
+    try:
+        possibleRooms.append(
+            rooms[player.currentRoom].n_to
+        )
+    except:
+        notRoom = True
+        pass
+    if(notRoom) :
+        possibleRooms.append(
+            'None'
+        )
+        notRoom = False
+    try:
+        possibleRooms.append(
+            rooms[player.currentRoom].e_to
+        )
+    except:
+        notRoom = True
+        pass
+    if(notRoom) :
+        possibleRooms.append(
+            'None'
+        )
+        notRoom = False
+    try:
+        possibleRooms.append(
+           rooms[player.currentRoom].s_to
+        )
+    except:
+        notRoom = True
+        pass
+    if(notRoom) :
+        possibleRooms.append(
+            'None'
+        )
+        notRoom = False
+    try:
+        possibleRooms.append(
+            rooms[player.currentRoom].w_to
+        )
+    except:
+        notRoom = True
+        pass
+    if(notRoom) :
+        possibleRooms.append(
+            'None'
+        )
+        notRoom = False
+    return possibleRooms
 
 i=-1
 while i < 0:
     update()
-    print('You can currently move to the following rooms.')
+    print('You can currently move to the following rooms. \n')
     currentRooms = playerChoice(room)
-    print(currentRooms)
-    choice = input('Please choose a direction to go. (n, e, s, w): ')
+    print(f' North: {currentRooms[0]} \n East: {currentRooms[1]} \n South: {currentRooms[2]} \n West: {currentRooms[3]}')
+    choice = input('\nPlease choose a direction to go. (n, e, s, w): ')
     if(choice == 'n'):
-        player.currentRoom = room[currentRooms[0]]
+        if(currentRooms[0] != 'None'):
+            player.currentRoom = currentRooms[0]
+        else:
+            print('You cannot go here!')
     elif(choice == 'e'):
-        player.currentRoom = room[currentRooms[1]]
+        if(currentRooms[1] != 'None'):
+            player.currentRoom = currentRooms[1]
+        else:
+            print('You cannot go here!')
     elif(choice == 's'):
-        player.currentRoom = room[currentRooms[2]]
+        if(currentRooms[2] != 'None'):
+            player.currentRoom = currentRooms[2]
+        else:
+            print('You cannot go here!')
     elif(choice == 'w'):
-        player.currentRoom = room[currentRooms[3]]
+        if(currentRooms[3] != 'None'):
+            player.currentRoom = currentRooms[3]
+        else:
+            print('You cannot go here!')
