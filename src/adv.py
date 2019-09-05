@@ -54,18 +54,31 @@ room['treasure'].s_to = room['narrow']
 from player import Player
 
 global player
-player = Player(room['outside'])
+player = Player(room['foyer'])
 
 def update():
+    print('\n')
     print(player)
 
-def playerChoice(**kwargs):
-    choices = []
-    for key, value in rooms.i:
-        if (player.currentRoom.name != value): 
-            choices.append(room)
-    print(choices)
+def playerChoice(rooms):
+    possibileRooms = []
+    for room in rooms:
+        if(rooms[room].name != player.currentRoom.name):
+            possibileRooms.append(room)
+    return possibileRooms
 
-update()
-
-playerChoice(**room)
+i=-1
+while i < 0:
+    update()
+    print('You can currently move to the following rooms.')
+    currentRooms = playerChoice(room)
+    print(currentRooms)
+    choice = input('Please choose a direction to go. (n, e, s, w): ')
+    if(choice == 'n'):
+        player.currentRoom = room[currentRooms[0]]
+    elif(choice == 'e'):
+        player.currentRoom = room[currentRooms[1]]
+    elif(choice == 's'):
+        player.currentRoom = room[currentRooms[2]]
+    elif(choice == 'w'):
+        player.currentRoom = room[currentRooms[3]]
